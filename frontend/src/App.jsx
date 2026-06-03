@@ -18,6 +18,13 @@ export default function App() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Estados para a IA
+  const [iaQuestion, setIaQuestion] = useState('');
+  const [iaResponse, setIaResponse] = useState('');
+  const [iaLoading, setIaLoading] = useState(false);
+  const [iaModo, setIaModo] = useState('resumido');
+  const [iaTipoPrompt, setIaTipoPrompt] = useState('simples');
+
   async function loadAppointments() {
     setLoading(true);
     setError('');
@@ -79,6 +86,39 @@ export default function App() {
     }
   }
 
+  // Função que envia a pergunta para a IA
+  async function handleAskIA(event) {
+    event.preventDefault();
+    if (!iaQuestion) return;
+
+    setIaLoading(true);
+    setIaResponse('');
+
+    try {
+      const response = await fetch(`${API_URL}/api/ia`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+        pergunta: iaQuestion, 
+        modo: iaModo, 
+        tipoPrompt: iaTipoPrompt 
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.sucesso) {
+        setIaResponse(data.resposta);
+      } else {
+        setIaResponse(data.erro);
+      }
+    } catch (err) {
+      setIaResponse('Erro ao conectar com o servidor.');
+    } finally {
+      setIaLoading(false);
+    }
+  }
+
   return (
     <div className="page">
       <header className="hero">
@@ -98,25 +138,62 @@ export default function App() {
       </section>
 
       <main className="content-grid">
-        <section className="card">
-          <h2>Nova consulta</h2>
-          <form className="form-grid" onSubmit={handleSubmit}>
-            <input name="patient" placeholder="Paciente" value={form.patient} onChange={handleChange} />
-            <input name="doctor" placeholder="Médico" value={form.doctor} onChange={handleChange} />
-            <input name="specialty" placeholder="Especialidade" value={form.specialty} onChange={handleChange} />
-            <input name="date" type="date" value={form.date} onChange={handleChange} />
-            <input name="time" type="time" value={form.time} onChange={handleChange} />
-            <select name="status" value={form.status} onChange={handleChange}>
-              <option>Aguardando</option>
-              <option>Confirmada</option>
-              <option>Remarcada</option>
-            </select>
-            <button type="submit">Cadastrar consulta</button>
-          </form>
+        <div>
+          <section className="card">
+            <h2>Nova consulta</h2>
+            <form className="form-grid" onSubmit={handleSubmit}>
+              <input name="patient" placeholder="Paciente" value={form.patient} onChange={handleChange} />
+              <input name="doctor" placeholder="Médico" value={form.doctor} onChange={handleChange} />
+              <input name="specialty" placeholder="Especialidade" value={form.specialty} onChange={handleChange} />
+              <input name="date" type="date" value={form.date} onChange={handleChange} />
+              <input name="time" type="time" value={form.time} onChange={handleChange} />
+              <select name="status" value={form.status} onChange={handleChange}>
+                <option>Aguardando</option>
+                <option>Confirmada</option>
+                <option>Remarcada</option>
+              </select>
+              <button type="submit">Cadastrar consulta</button>
+            </form>
 
-          {success && <p className="message success">{success}</p>}
-          {error && <p className="message error">{error}</p>}
-        </section>
+            {success && <p className="message success">{success}</p>}
+            {error && <p className="message error">{error}</p>}
+          </section>
+
+          {/* NOVA SEÇÃO DA IA */}
+          <select value={iaModo} onChange={e => setIaModo(e.target.value)}>
+            <option value="tecnico">Modo Técnico</option>
+            <option value="resumido">Modo Resumido</option>
+            <option value="professor">Modo Professor</option>
+            <option value="detalhado">Modo Detalhado</option>
+            <option value="suporte_tecnico">Suporte Técnico de TI</option>
+          </select>
+
+          <select value={iaTipoPrompt} onChange={e => setIaTipoPrompt(e.target.value)}>
+            <option value="simples">Prompt Simples</option>
+            <option value="estruturado">Prompt Estruturado</option>
+            <option value="especializado">Prompt Especializado</option>
+          </select>
+          <section className="card" style={{ marginTop: '20px' }}>
+            <h2>Assistente MedAgenda (IA)</h2>
+            <form className="form-grid" onSubmit={handleAskIA}>
+              <input 
+                placeholder="Faça uma pergunta ou peça um resumo..." 
+                value={iaQuestion} 
+                onChange={e => setIaQuestion(e.target.value)} 
+              />
+              <button type="submit" disabled={iaLoading} style={{ background: '#0f766e' }}>
+                {iaLoading ? 'Pensando...' : 'Perguntar à IA'}
+              </button>
+            </form>
+            
+            {iaResponse && (
+              <div className="message" style={{ background: '#f8fafc', color: '#0f172a', marginTop: '15px', border: '1px solid #cbd5e1' }}>
+                <strong>Resposta:</strong>
+                <p style={{ margin: '10px 0 0 0', whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>{iaResponse}</p>
+              </div>
+            )}
+          </section>
+        </div>
 
         <section className="card">
           <div className="table-header">
