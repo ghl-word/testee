@@ -1,0 +1,69 @@
+{
+  "info": {
+    "name": "MedAgenda API Tests",
+    "description": "Testes de API para o sistema MedAgenda",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Listar Consultas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/appointments",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "appointments"]
+        }
+      }
+    },
+    {
+      "name": "2. Criar Consulta",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient\": \"João Teste API\",\n  \"doctor\": \"Dr. House\",\n  \"specialty\": \"Clínico Geral\",\n  \"date\": \"2026-12-01\",\n  \"time\": \"10:00\",\n  \"status\": \"Aguardando\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/appointments",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "appointments"]
+        }
+      }
+    },
+    {
+      "name": "3. Assistente IA",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pergunta\": \"Estou com dor de cabeça, o que pode ser?\",\n  \"modo\": \"resumido\",\n  \"tipoPrompt\": \"simples\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/ia",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "ia"]
+        }
+      }
+    }
+  ]
+}

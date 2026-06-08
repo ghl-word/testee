@@ -1,0 +1,93 @@
+{
+  "v": 12,
+  "name": "MedAgenda API Tests",
+  "folders": [],
+  "requests": [
+    {
+      "v": "17",
+      "name": "1. Listar Consultas",
+      "method": "GET",
+      "endpoint": "http://localhost:3000/api/appointments",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "2. Criar Consulta",
+      "method": "POST",
+      "endpoint": "http://localhost:3000/api/appointments",
+      "params": [],
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "application/json",
+        "body": "{\n  \"patient\": \"João Teste API\",\n  \"doctor\": \"Dr. House\",\n  \"specialty\": \"Clínico Geral\",\n  \"date\": \"2026-12-01\",\n  \"time\": \"10:00\",\n  \"status\": \"Aguardando\"\n}"
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    },
+    {
+      "v": "17",
+      "name": "3. Assistente IA",
+      "method": "POST",
+      "endpoint": "http://localhost:3000/api/ia",
+      "params": [],
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": "application/json",
+        "body": "{\n  \"pergunta\": \"Estou com dor de cabeça, o que pode ser?\",\n  \"modo\": \"resumido\",\n  \"tipoPrompt\": \"simples\"\n}"
+      },
+      "requestVariables": [],
+      "responses": {},
+      "description": null
+    }
+  ],
+  "auth": {
+    "authType": "inherit",
+    "authActive": true
+  },
+  "headers": [],
+  "variables": [],
+  "description": "Testes de API para o sistema MedAgenda",
+  "preRequestScript": "",
+  "testScript": ""
+}
